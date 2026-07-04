@@ -1,0 +1,43 @@
+name: Deploy to hieutv-dng.github.io
+
+on:
+  push:
+    branches: [master]
+  workflow_dispatch:
+
+# Một deploy chạy tại một thời điểm; deploy mới huỷ deploy cũ đang chạy
+concurrency:
+  group: pages-deploy
+  cancel-in-progress: true
+
+# Least-privilege cho GITHUB_TOKEN mặc định (deploy dùng SSH key riêng, chỉ cần đọc để checkout)
+permissions:
+  contents: read
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # Pin exact version khớp local (Flutter 3.41.9 / Dart 3.11.5); cache SDK giữa các run
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          flutter-version: 3.41.9
+          cache: true
+
+      # pubspec.lock đã commit -> resolve đúng version, không tự nâng deps
+      - run: flutter pub get
+      - run: flutter analyze
+      - run: flutter test
+      # base-href mặc định "/" đúng cho root domain hieutv-dng.github.io
+      - run: flutter build web --release
+
+      # Push build/web sang repo github.io; KHÔNG force_orphan -> giữ nguyên git history (site 2021 khôi phục được)
+      - uses: peaceiris/actions-gh-pages@v4
+        with:
+          deploy_key: ${{ secrets.ACTIONS_DEPLOY_KEY }}
+          external_repository: hieutv-dng/hieutv-dng.github.io
+          publish_branch: master
+          publish_dir: ./build/web
