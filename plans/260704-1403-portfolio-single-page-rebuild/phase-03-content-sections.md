@@ -1,7 +1,7 @@
 ---
 phase: 3
 title: "Content Sections"
-status: pending
+status: done
 effort: "1d"
 priority: P1
 dependencies: [2]
@@ -46,9 +46,9 @@ Hoàn thiện 4 section nội dung từ stub: About/Skills, Projects, Experience
 
 ## Success Criteria
 
-- [ ] 4 section render đúng data placeholder, đủ 3 breakpoints không overflow
-- [ ] Đổi thử 1 giá trị trong `portfolio_data.dart` → UI cập nhật, không sửa file UI nào
-- [ ] 0 analyze issues, tests pass
+- [x] 4 section render đúng data placeholder, đủ 3 breakpoints không overflow
+- [x] Đổi thử 1 giá trị trong `portfolio_data.dart` → UI cập nhật, không sửa file UI nào
+- [x] 0 analyze issues, tests pass
 
 ## Risk Assessment
 

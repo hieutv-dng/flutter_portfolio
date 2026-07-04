@@ -14,6 +14,7 @@ class Profile {
     required this.tagline,
     required this.bio,
     required this.avatarAsset,
+    required this.email,
     required this.cvUrl,
   });
 
@@ -24,6 +25,9 @@ class Profile {
 
   /// Asset path to the avatar image bundled under `assets/images/`.
   final String avatarAsset;
+
+  /// Contact address surfaced as a `mailto:` button in the contact section.
+  final String email;
 
   /// External URL for the downloadable CV. `#` is a valid placeholder; the
   /// launcher guards it so tapping never crashes.
@@ -114,6 +118,7 @@ const PortfolioData kPortfolioData = PortfolioData(
         'I enjoy turning product ideas into fast, accessible apps that feel '
         'great to use on every screen size.',
     avatarAsset: 'assets/images/IMG_7344.jpg',
+    email: 'vuhieu91@gmail.com',
     cvUrl: '#',
   ),
   socials: <SocialLink>[

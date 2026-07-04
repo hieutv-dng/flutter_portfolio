@@ -33,7 +33,7 @@ Design đã chốt: [Brainstorm report](../reports/brainstorm-260704-1403-portfo
 |-------|------|--------|
 | 1 | [Foundation & Assets](./phase-01-foundation-assets.md) | Done |
 | 2 | [Page Shell & Navigation](./phase-02-page-shell-navigation.md) | Done |
-| 3 | [Content Sections](./phase-03-content-sections.md) | Pending |
+| 3 | [Content Sections](./phase-03-content-sections.md) | Done |
 | 4 | [Animations & Web Polish](./phase-04-animations-web-polish.md) | Pending |
 | 5 | [Tests & QA](./phase-05-tests-qa.md) | Pending |
 | 6 | [CI/CD Deploy](./phase-06-ci-cd-deploy.md) | Pending |
