@@ -1,30 +1,19 @@
-// This is a basic Flutter widget test.
-//
-// To perform an interaction with a widget in your test, use the WidgetTester
-// utility in the flutter_test package. For example, you can send tap and scroll
-// gestures. You can also use WidgetTester to find child widgets in the widget
-// tree, read text, and verify that the values of widget properties are correct.
+// Smoke test: the portfolio app builds and renders without throwing.
 
 import 'package:flutter/material.dart';
+import 'package:flutter_portfolio/src/app.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:flutter_portfolio/main.dart';
-
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
-    await tester.pumpWidget(const MyApp());
+  testWidgets('PortfolioApp renders a MaterialApp without exceptions', (
+    WidgetTester tester,
+  ) async {
+    await tester.pumpWidget(const PortfolioApp());
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
-
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
-    await tester.pump();
-
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+    expect(find.byType(MaterialApp), findsOneWidget);
+    // Proves the placeholder content actually reaches the UI:
+    // kPortfolioData.profile.name is rendered by HomePage.
+    expect(find.text('Hieu Tran'), findsOneWidget);
+    expect(tester.takeException(), isNull);
   });
 }
