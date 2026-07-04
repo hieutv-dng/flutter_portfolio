@@ -1,7 +1,7 @@
 ---
 phase: 5
 title: "Tests & QA"
-status: pending
+status: done
 effort: "0.5d"
 priority: P2
 dependencies: [4]
@@ -53,9 +53,15 @@ Phủ widget tests cho hành vi chính (render sections, navigation scroll, resp
 
 ## Success Criteria
 
-- [ ] 7 nhóm test pass ổn định (chạy 2 lần liên tiếp không flaky)
-- [ ] QA checklist 4 lệnh xanh; smoke 2 browser OK
-- [ ] Không còn test counter cũ
+- [x] Test pass ổn định — 13 test / 8 nhóm (7 bắt buộc + theme toggle), xanh 3 lần liên tiếp kể cả randomized-order, không flaky
+- [x] QA 4 lệnh tự động xanh: `flutter analyze` 0 issues · `dart format --set-exit-if-changed .` clean · `flutter test` 13/13 · `flutter build web --release` success. Smoke Chrome+Safari: THỦ CÔNG, bàn giao user (môi trường agent không có browser tương tác)
+- [x] Không còn test counter cũ (`widget_test.dart` gộp smoke vào `home_page_test.dart` rồi xoá)
+
+## Completion Notes
+
+- QA phát hiện + fix regression **double-hamburger** trên mobile: `Scaffold` có `endDrawer` + `AppBar` không set `actions` → framework tự chèn `EndDrawerButton` cộng hamburger tự viết = 2 icon. Fix (user duyệt): chuyển controls sang `AppBar.actions` + `centerTitle: false` trong `lib/src/ui/widgets/nav_bar.dart`; giữ nguyên public API NavBar → `home_page.dart` không đổi. Test mobile là regression guard.
+- Backlog (ngoài scope, chờ chủ dự án quyết): hover-accent nav link desktop nhiều khả năng no-op vì M3 default `TextButton` foreground đã là `colorScheme.primary` (`nav_bar.dart` hover style + `app_theme.dart` không set `textButtonTheme`).
+- Test files thực: `test/helpers/pump_portfolio.dart`, `test/home_page_test.dart`, `test/sections_test.dart`, `test/reveal_on_scroll_test.dart`, `test/portfolio_data_test.dart`.
 
 ## Risk Assessment
 
