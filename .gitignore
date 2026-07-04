@@ -33,7 +33,6 @@ migrate_working_dir/
 .pub/
 
 # Web related
-lib/generated_plugin_registrant.dart
 
 # MacOS related
 macos/Flutter/GeneratedPluginRegistrant.swift

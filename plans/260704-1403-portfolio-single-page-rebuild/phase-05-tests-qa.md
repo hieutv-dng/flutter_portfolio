@@ -9,6 +9,8 @@ dependencies: [4]
 
 # Phase 5: Tests & QA
 
+<!-- Updated: Validation Session 1 - +test theme toggle (optional); tests chạy dưới strict lint (directives_ordering + always_declare_return_types) -->
+
 ## Overview
 
 Phủ widget tests cho hành vi chính (render sections, navigation scroll, responsive switch) + QA checklist toàn cục trước khi nối CI. Không đuổi theo coverage % — test hành vi user-facing.
@@ -23,7 +25,8 @@ Phủ widget tests cho hành vi chính (render sections, navigation scroll, resp
   5. Projects grid: đúng số card = số project trong `kPortfolioData`
   6. `RevealOnScroll`: pump với `disableAnimations: true` (MediaQuery override) → child hiện ngay
   7. Data sanity: `kPortfolioData` — lists non-empty, asset paths bắt đầu `assets/`, url không rỗng khi khai báo
-- Non-functional: KHÔNG tap link mở external trong test (url_launcher plugin không có trong test env — chỉ assert presence)
+  8. Theme toggle (optional): pump 1440x900, tap `IconButton` toggle → `MaterialApp.themeMode` đổi khỏi `system` (light↔dark)
+- Non-functional: KHÔNG tap link mở external trong test (url_launcher plugin không có trong test env — chỉ assert presence); test file cũng phải xanh dưới strict lint (`always_declare_return_types` cho `void main()`/helper)
 
 ## Architecture
 

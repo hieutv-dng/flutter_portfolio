@@ -9,6 +9,8 @@ dependencies: [3]
 
 # Phase 4: Animations & Web Polish
 
+<!-- Updated: Validation Session 1 - theme toggle icon transition (optional, AnimatedSwitcher) -->
+
 ## Overview
 
 Thêm lớp "animated" cho portfolio: entrance animation hero, scroll-reveal cho section, hover effects desktop; polish `web/index.html` (loading splash, meta/SEO tags) và `manifest.json`.
@@ -19,6 +21,7 @@ Thêm lớp "animated" cho portfolio: entrance animation hero, scroll-reveal cho
   - Hero: stagger fade+slide (avatar → name → role → social → CTA) khi load, dùng `flutter_animate`
   - Section reveal: fade + slide-up chạy 1 lần khi section vào ~80% viewport
   - Hover desktop: project card scale nhẹ (1.02) + border accent; nav link đổi màu; social icon đổi màu
+  - Theme toggle (Phase 2): icon sun/moon đổi mượt bằng `AnimatedSwitcher` (optional — tôn trọng `disableAnimations`)
   - Loading splash: HTML/CSS thuần trong `index.html` (tên + spinner), remove khi nhận event `flutter-first-frame`
 - Non-functional:
   - Reduced motion: `MediaQuery.disableAnimations == true` → bỏ qua reveal/entrance (hiện thẳng nội dung)

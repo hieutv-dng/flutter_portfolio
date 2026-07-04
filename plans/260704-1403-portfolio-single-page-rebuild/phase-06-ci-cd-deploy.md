@@ -9,6 +9,8 @@ dependencies: [5]
 
 # Phase 6: CI/CD Deploy
 
+<!-- Updated: Validation Session 1 - pin Flutter 3.41.9; CI hưởng pubspec.lock committed (reproducible) -->
+
 ## Overview
 
 Workflow GitHub Actions: push `master` → analyze + test + build web → push `build/web` sang repo `hieutv-dng/hieutv-dng.github.io` (branch `master`) bằng deploy key. Gồm bước manual một lần của user (tạo key) và verify site live.
@@ -20,6 +22,7 @@ Workflow GitHub Actions: push `master` → analyze + test + build web → push `
   - KHÔNG `force_orphan` — giữ nguyên git history repo github.io (site 2021 khôi phục được)
   - Secret không bao giờ in ra log; private key không nằm trong repo/máy sau khi setup
   - Concurrency: deploy sau cancel deploy trước đang chạy
+  - Reproducible: `pubspec.lock` đã commit (Phase 1) → `flutter pub get` trên CI resolve đúng version, không tự nâng deps
 
 ## Architecture
 
@@ -37,7 +40,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: subosito/flutter-action@v2
-        with: {channel: stable, flutter-version: <pin đúng version local `flutter --version`>, cache: true}
+        with: {channel: stable, flutter-version: 3.41.9, cache: true}   # verified local: Flutter 3.41.9 / Dart 3.11.5
       - run: flutter pub get
       - run: flutter analyze
       - run: flutter test
@@ -57,7 +60,7 @@ jobs:
 
 ## Implementation Steps
 
-1. Pin version: chạy `flutter --version` local → điền vào workflow
+1. Pin version: Flutter `3.41.9` (đã verify local, Dart 3.11.5) → đã điền vào workflow
 2. Viết `deploy.yml` như trên
 3. **Manual (user, một lần)** — checklist đưa user làm, KHÔNG tự động hoá bước này:
    - [ ] `ssh-keygen -t ed25519 -C "actions-deploy@flutter_portfolio" -f /tmp/portfolio_deploy_key -N ""`
