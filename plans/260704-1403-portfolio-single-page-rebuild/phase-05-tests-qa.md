@@ -1,0 +1,61 @@
+---
+phase: 5
+title: "Tests & QA"
+status: pending
+effort: "0.5d"
+priority: P2
+dependencies: [4]
+---
+
+# Phase 5: Tests & QA
+
+## Overview
+
+Phủ widget tests cho hành vi chính (render sections, navigation scroll, responsive switch) + QA checklist toàn cục trước khi nối CI. Không đuổi theo coverage % — test hành vi user-facing.
+
+## Requirements
+
+- Functional tests:
+  1. App smoke: `PortfolioApp` pump không exception (đã có từ Phase 1 — giữ)
+  2. HomePage render đủ 5 section heading (scroll tới cuối bằng `tester.scrollUntilVisible` với footer text)
+  3. Nav desktop: surface 1440x900 → links inline hiển thị, không có hamburger; tap "Projects" → heading Projects visible
+  4. Nav mobile: surface 390x844 → hamburger mở drawer, tap link → drawer đóng + section visible
+  5. Projects grid: đúng số card = số project trong `kPortfolioData`
+  6. `RevealOnScroll`: pump với `disableAnimations: true` (MediaQuery override) → child hiện ngay
+  7. Data sanity: `kPortfolioData` — lists non-empty, asset paths bắt đầu `assets/`, url không rỗng khi khai báo
+- Non-functional: KHÔNG tap link mở external trong test (url_launcher plugin không có trong test env — chỉ assert presence)
+
+## Architecture
+
+- `test/helpers/pump_portfolio.dart`: hàm `pumpPortfolio(tester, {Size size})` — set `tester.view.physicalSize` + `devicePixelRatio=1`, addTearDown reset, pump `PortfolioApp`
+- Test files theo màn: `test/home_page_test.dart`, `test/sections_test.dart`, `test/reveal_on_scroll_test.dart`, `test/portfolio_data_test.dart` (thay thế dần `widget_test.dart` nếu trùng — giữ 1 smoke)
+- Ảnh asset trong widget test: ảnh jpg decode được trong test env; nếu HTTP/asset lỗi → dùng `mocktail`?? KHÔNG thêm dep — assets bundle local decode bình thường qua `flutter_test`
+
+## Related Code Files
+
+- Create: `test/helpers/pump_portfolio.dart`, `test/home_page_test.dart`, `test/sections_test.dart`, `test/reveal_on_scroll_test.dart`, `test/portfolio_data_test.dart`
+- Modify: `test/widget_test.dart` (thu gọn còn app smoke hoặc gộp vào home_page_test rồi xoá)
+
+## Implementation Steps
+
+1. Viết helper pump + reset viewport
+2. Tests 2→7 theo thứ tự requirements
+3. QA checklist chạy tay:
+   - `flutter analyze` → 0 issues
+   - `dart format --set-exit-if-changed .` → clean
+   - `flutter test` → all pass
+   - `flutter build web --release` → success
+   - Smoke Chrome + Safari (mở build local): scroll, nav, hover, splash
+4. Fix mọi regression phát hiện — không skip/weaken test
+
+## Success Criteria
+
+- [ ] 7 nhóm test pass ổn định (chạy 2 lần liên tiếp không flaky)
+- [ ] QA checklist 4 lệnh xanh; smoke 2 browser OK
+- [ ] Không còn test counter cũ
+
+## Risk Assessment
+
+- `scrollUntilVisible` flaky với animation reveal: trong test, MediaQuery `disableAnimations: true` qua helper để reveal tức thì
+- Ảnh lớn làm test chậm: chấp nhận (test env decode 2 ảnh); nếu >5s cân nhắc `precacheImage` bỏ qua
+- Viewport không reset gây lây test sau: `addTearDown(tester.view.reset*)` trong helper — bắt buộc
