@@ -22,10 +22,24 @@ class ThemeToggleButton extends StatelessWidget {
           ThemeMode.system =>
             MediaQuery.platformBrightnessOf(context) == Brightness.dark,
         };
+        // Cross-fade + quarter-turn between the sun and moon; instant under
+        // reduced motion so the swap still happens without animating.
+        final bool reduceMotion = MediaQuery.disableAnimationsOf(context);
         return IconButton(
           tooltip: isDark ? 'Switch to light mode' : 'Switch to dark mode',
-          icon: Icon(
-            isDark ? Icons.light_mode_outlined : Icons.dark_mode_outlined,
+          icon: AnimatedSwitcher(
+            duration: reduceMotion
+                ? Duration.zero
+                : const Duration(milliseconds: 250),
+            transitionBuilder: (Widget child, Animation<double> animation) =>
+                RotationTransition(
+                  turns: Tween<double>(begin: 0.7, end: 1).animate(animation),
+                  child: FadeTransition(opacity: animation, child: child),
+                ),
+            child: Icon(
+              isDark ? Icons.light_mode_outlined : Icons.dark_mode_outlined,
+              key: ValueKey<bool>(isDark),
+            ),
           ),
           onPressed: () =>
               themeMode.value = isDark ? ThemeMode.light : ThemeMode.dark,

@@ -38,7 +38,9 @@ class NavBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     final bool isDesktop = ScreenSize.of(context) == ScreenSize.desktop;
-    final TextTheme text = Theme.of(context).textTheme;
+    final ThemeData theme = Theme.of(context);
+    final TextTheme text = theme.textTheme;
+    final ColorScheme colors = theme.colorScheme;
     return AppBar(
       titleSpacing: 0,
       title: Padding(
@@ -63,6 +65,16 @@ class NavBar extends StatelessWidget implements PreferredSizeWidget {
                   padding: const EdgeInsets.symmetric(horizontal: 4),
                   child: TextButton(
                     onPressed: item.onTap,
+                    // Text shifts to the accent on hover; null keeps the
+                    // default colour otherwise.
+                    style: ButtonStyle(
+                      foregroundColor: WidgetStateProperty.resolveWith<Color?>(
+                        (Set<WidgetState> states) =>
+                            states.contains(WidgetState.hovered)
+                            ? colors.primary
+                            : null,
+                      ),
+                    ),
                     child: Text(item.label),
                   ),
                 ),

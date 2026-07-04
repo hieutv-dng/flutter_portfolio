@@ -10,6 +10,7 @@ import '../sections/hero_section.dart';
 import '../sections/projects_section.dart';
 import '../widgets/nav_bar.dart';
 import '../widgets/nav_drawer.dart';
+import '../widgets/reveal_on_scroll.dart';
 
 /// One scrollable section paired with the key used to scroll to it.
 typedef _Section = ({String label, GlobalKey key, Widget child});
@@ -32,6 +33,16 @@ class _HomePageState extends State<HomePage> {
   final GlobalKey _projectsKey = GlobalKey();
   final GlobalKey _experienceKey = GlobalKey();
   final GlobalKey _contactKey = GlobalKey();
+
+  /// Shared with the body scroll view and every [RevealOnScroll] wrapper so the
+  /// sections detect entering the viewport off one controller, not many.
+  final ScrollController _scrollController = ScrollController();
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
 
   /// Smoothly scrolls the section carrying [key] into view. Robust to sections
   /// of differing heights — no manual offset maths.
@@ -88,11 +99,21 @@ class _HomePageState extends State<HomePage> {
           ? null
           : NavDrawer(items: navItems, themeMode: PortfolioApp.themeMode),
       body: SingleChildScrollView(
+        controller: _scrollController,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
-            for (final _Section section in sections)
-              KeyedSubtree(key: section.key, child: section.child),
+            for (final (int index, _Section section) in sections.indexed)
+              KeyedSubtree(
+                key: section.key,
+                // The hero plays its own entrance; the rest reveal on scroll.
+                child: index == 0
+                    ? section.child
+                    : RevealOnScroll(
+                        controller: _scrollController,
+                        child: section.child,
+                      ),
+              ),
           ],
         ),
       ),

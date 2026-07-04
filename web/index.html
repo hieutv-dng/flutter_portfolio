@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
   <!--
     If you are serving your web app in a path other than the root, change the
@@ -18,21 +18,100 @@
 
   <meta charset="UTF-8">
   <meta content="IE=Edge" http-equiv="X-UA-Compatible">
-  <meta name="description" content="A new Flutter project.">
+  <meta name="description" content="Hieu Tran — Mobile & Flutter engineer building responsive, animated cross-platform apps for web and mobile.">
+  <meta name="theme-color" content="#3D5AFE">
+
+  <!-- Open Graph / social sharing -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Hieu Tran — Mobile & Flutter Engineer">
+  <meta property="og:description" content="Responsive, animated cross-platform experiences built with Flutter.">
+  <meta property="og:image" content="https://hieutv-dng.github.io/icons/Icon-512.png">
+  <meta property="og:url" content="https://hieutv-dng.github.io/">
 
   <!-- iOS meta tags & icons -->
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
-  <meta name="apple-mobile-web-app-title" content="flutter_portfolio">
+  <meta name="apple-mobile-web-app-title" content="Hieu Tran">
   <link rel="apple-touch-icon" href="icons/Icon-192.png">
 
   <!-- Favicon -->
   <link rel="icon" type="image/png" href="favicon.png"/>
 
-  <title>flutter_portfolio</title>
+  <title>Hieu Tran</title>
   <link rel="manifest" href="manifest.json">
+
+  <style>
+    /* Pure HTML/CSS loading splash shown until Flutter paints its first frame,
+       so the page never flashes blank while the engine downloads. Adapts to the
+       OS light/dark preference and honours reduced motion. */
+    #splash {
+      position: fixed;
+      inset: 0;
+      z-index: 2147483647;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 24px;
+      background: #ffffff;
+      color: #1a1a1a;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      opacity: 1;
+      transition: opacity 0.35s ease;
+    }
+    #splash.splash--hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
+    #splash .splash__name {
+      font-size: 1.5rem;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+    }
+    #splash .splash__spinner {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      border: 3px solid rgba(61, 90, 254, 0.25);
+      border-top-color: #3d5afe;
+      animation: splash-spin 0.9s linear infinite;
+    }
+    @keyframes splash-spin {
+      to { transform: rotate(360deg); }
+    }
+    @media (prefers-color-scheme: dark) {
+      #splash { background: #121212; color: #e6e6e6; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      #splash { transition: none; }
+      #splash .splash__spinner { animation: none; opacity: 0.5; }
+    }
+  </style>
 </head>
 <body>
+  <div id="splash" aria-hidden="true">
+    <div class="splash__name">Hieu Tran</div>
+    <div class="splash__spinner"></div>
+  </div>
+
+  <script>
+    // Remove the splash once Flutter paints its first frame. The engine
+    // dispatches `flutter-first-frame` on `window` (verified in the 3.41
+    // engine source). The timer is a fallback so a disabled transition
+    // (reduced motion) — where `transitionend` never fires — can't leave the
+    // overlay stuck on screen.
+    window.addEventListener('flutter-first-frame', function () {
+      var splash = document.getElementById('splash');
+      if (!splash) { return; }
+      splash.classList.add('splash--hidden');
+      var remove = function () {
+        if (splash) { splash.remove(); splash = null; }
+      };
+      splash.addEventListener('transitionend', remove);
+      window.setTimeout(remove, 500);
+    });
+  </script>
+
   <!--
     You can customize the "flutter_bootstrap.js" script.
     This is useful to provide a custom configuration to the Flutter loader

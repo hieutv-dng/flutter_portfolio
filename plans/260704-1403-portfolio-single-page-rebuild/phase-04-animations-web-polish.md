@@ -1,7 +1,7 @@
 ---
 phase: 4
 title: "Animations & Web Polish"
-status: pending
+status: done
 effort: "0.5d"
 priority: P2
 dependencies: [3]
@@ -54,10 +54,17 @@ Thêm lớp "animated" cho portfolio: entrance animation hero, scroll-reveal cho
 
 ## Success Criteria
 
-- [ ] Hero entrance + section reveal chạy đúng, chỉ 1 lần mỗi section
-- [ ] `disableAnimations` → nội dung hiện thẳng, không animation
-- [ ] Splash hiển thị trước first frame rồi remove sạch (không đè UI)
-- [ ] Meta tags đủ: title, description, og:*; 0 analyze issues, tests pass
+- [x] Hero entrance + section reveal chạy đúng, chỉ 1 lần mỗi section
+- [x] `disableAnimations` → nội dung hiện thẳng, không animation
+- [x] Splash hiển thị trước first frame rồi remove sạch (không đè UI)
+- [x] Meta tags đủ: title, description, og:*; 0 analyze issues, tests pass
+
+## Completion Notes
+
+- `flutter-first-frame` xác minh dispatch trên `window` từ engine 3.41 source (`platform_dispatcher.dart:557`); splash remove qua `transitionend` + fallback `setTimeout(500)` cho trường hợp reduced-motion (transition disabled).
+- Reveal-on-scroll dùng 1 `ScrollController` chung; listener tự gỡ sau lần reveal đầu + trong `dispose`. Code review bắt 1 edge-case: tắt reduced-motion giữa phiên có thể kẹt section ở opacity 0 → đã fix bằng cách set `_revealed = true` khi short-circuit reduced-motion.
+- `flutter analyze` = 0 issues (strict lint), `flutter test` pass, `flutter build web --release` OK; output build chứa đủ splash + OG tags + theme-color.
+- Deferred sang Phase 5 (Tests & QA): live-browser walkthrough (splash fade thực tế, emulate `prefers-reduced-motion`), test widget cho reveal/entrance + theme-toggle transition.
 
 ## Risk Assessment
 

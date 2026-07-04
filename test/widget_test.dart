@@ -9,7 +9,8 @@ void main() {
     WidgetTester tester,
   ) async {
     await tester.pumpWidget(const PortfolioApp());
-    await tester.pump();
+    // Settle the hero entrance / reveal animations so no timers stay pending.
+    await tester.pumpAndSettle();
 
     expect(find.byType(MaterialApp), findsOneWidget);
     // The profile name reaches the UI via both the nav bar and the hero, so it
