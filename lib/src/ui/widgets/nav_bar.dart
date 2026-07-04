@@ -43,54 +43,57 @@ class NavBar extends StatelessWidget implements PreferredSizeWidget {
     final ColorScheme colors = theme.colorScheme;
     return AppBar(
       titleSpacing: 0,
+      centerTitle: false,
+      // The name/logo sits at the start and returns to the hero when tapped.
       title: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16),
-        child: Row(
-          children: <Widget>[
-            InkWell(
-              onTap: onLogoTap,
-              borderRadius: BorderRadius.circular(8),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
-                child: Text(
-                  title,
-                  style: text.titleLarge?.copyWith(fontWeight: FontWeight.bold),
-                ),
-              ),
+        child: InkWell(
+          onTap: onLogoTap,
+          borderRadius: BorderRadius.circular(8),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+            child: Text(
+              title,
+              style: text.titleLarge?.copyWith(fontWeight: FontWeight.bold),
             ),
-            const Spacer(),
-            if (isDesktop) ...<Widget>[
-              for (final NavItem item in items)
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 4),
-                  child: TextButton(
-                    onPressed: item.onTap,
-                    // Text shifts to the accent on hover; null keeps the
-                    // default colour otherwise.
-                    style: ButtonStyle(
-                      foregroundColor: WidgetStateProperty.resolveWith<Color?>(
-                        (Set<WidgetState> states) =>
-                            states.contains(WidgetState.hovered)
-                            ? colors.primary
-                            : null,
-                      ),
-                    ),
-                    child: Text(item.label),
-                  ),
-                ),
-              const SizedBox(width: 8),
-              ThemeToggleButton(themeMode: themeMode),
-            ] else ...<Widget>[
-              ThemeToggleButton(themeMode: themeMode),
-              IconButton(
-                tooltip: 'Open navigation menu',
-                icon: const Icon(Icons.menu),
-                onPressed: onMenuTap,
-              ),
-            ],
-          ],
+          ),
         ),
       ),
+      // Controls live in `actions` rather than the title: a non-empty actions
+      // list stops the framework from auto-injecting its own end-drawer button,
+      // which would otherwise double the hamburger on compact layouts.
+      actions: <Widget>[
+        if (isDesktop) ...<Widget>[
+          for (final NavItem item in items)
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 4),
+              child: TextButton(
+                onPressed: item.onTap,
+                // Text shifts to the accent on hover; null keeps the default
+                // colour otherwise.
+                style: ButtonStyle(
+                  foregroundColor: WidgetStateProperty.resolveWith<Color?>(
+                    (Set<WidgetState> states) =>
+                        states.contains(WidgetState.hovered)
+                        ? colors.primary
+                        : null,
+                  ),
+                ),
+                child: Text(item.label),
+              ),
+            ),
+          const SizedBox(width: 8),
+          ThemeToggleButton(themeMode: themeMode),
+        ] else ...<Widget>[
+          ThemeToggleButton(themeMode: themeMode),
+          IconButton(
+            tooltip: 'Open navigation menu',
+            icon: const Icon(Icons.menu),
+            onPressed: onMenuTap,
+          ),
+        ],
+        const SizedBox(width: 8),
+      ],
     );
   }
 }
